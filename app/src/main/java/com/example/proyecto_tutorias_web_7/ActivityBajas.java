@@ -8,31 +8,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
-import java.util.List;
-import java.util.ArrayList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyecto_tutorias_web_7.modelo.Alumno;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import controlador.AnalizadorJSON;
 import com.example.proyecto_tutorias_web_7.AlumnoAdapter;
+import java.util.List;
 import java.util.ArrayList;
 
 public class ActivityBajas extends Activity {
 
     private EditText inputNumControl;
-    private String numeroControlFiltro = "";
+    private static ArrayList<Alumno> listaAlumnos = new ArrayList<>();
     private AlumnoAdapter alumnoAdapter;
-    private List<Alumno> listaAlumnosOriginal = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,26 +38,31 @@ public class ActivityBajas extends Activity {
         alumnoAdapter = new AlumnoAdapter(new ArrayList<>());
         recyclerView.setAdapter(alumnoAdapter);
 
-        inputNumControl.addTextChangedListener(new TextWatcher() {
+        cargarListadoDeAlumnos();
+
+        inputNumControl.addTextChangedListener(new android.text.TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                onNumeroControlChanged(inputNumControl, start, before, count);
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                String textoBusqueda = charSequence.toString().toLowerCase();
+                List<Alumno> alumnosFiltrados = new ArrayList<>();
+
+                for (Alumno alumno : listaAlumnos) {
+                    if (alumno.getNumControl().toLowerCase().contains(textoBusqueda)) {
+                        alumnosFiltrados.add(alumno);
+                    }
+                }
+
+                alumnoAdapter.updateData(alumnosFiltrados);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(android.text.Editable editable) {
             }
         });
-
-        cargarListadoDeAlumnos();
-    }
-    private void onNumeroControlChanged(EditText editText, int start, int before, int count) {
-        numeroControlFiltro = editText.getText().toString().trim();
-        cargarListadoDeAlumnos();
     }
 
     private void cargarListadoDeAlumnos() {
@@ -76,12 +73,12 @@ public class ActivityBajas extends Activity {
             String URL = "http://192.168.0.17:8081/Semestre_Ago_Dic_2024/Proyecto_ProgramacionWeb/api_rest_android_escuela/api_mysql_consultas.php";
             String metodo = "POST";
 
-           //---- final String numeroControl = inputNumControl.getText().toString().trim().isEmpty() ? "%" : inputNumControl.getText().toString().trim();
+            final String numeroControl = inputNumControl.getText().toString().trim().isEmpty() ? "%" : inputNumControl.getText().toString().trim();
             AnalizadorJSON analizadorJSON = new AnalizadorJSON();
 
             new Thread(() -> {
                 try {
-                    JSONObject jsonObject = analizadorJSON.peticionHTTPConsultas(URL, metodo, numeroControlFiltro);
+                    JSONObject jsonObject = analizadorJSON.peticionHTTPConsultas(URL, metodo, numeroControl);
 
                     Log.d("JSON Respuesta", jsonObject.toString());
 
@@ -103,7 +100,9 @@ public class ActivityBajas extends Activity {
                             ));
                         }
 
-                        runOnUiThread(() -> alumnoAdapter.updateData(alumnos)); // Actualiza los datos en el RecyclerView
+                        listaAlumnos.clear();
+                        listaAlumnos.addAll(alumnos);
+                        runOnUiThread(() -> alumnoAdapter.updateData(alumnos));
                     } else {
                         runOnUiThread(() -> {
                             Toast.makeText(this, "No se encontraron registros", Toast.LENGTH_SHORT).show();
@@ -164,6 +163,5 @@ public class ActivityBajas extends Activity {
                 });
             }
         }).start();
-
     }
 }
