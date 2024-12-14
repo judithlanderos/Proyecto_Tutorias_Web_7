@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Campo Número de Control -->
+    <EditText
+        android:id="@+id/inputNumControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Número de Control"
+        android:inputType="text"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Campo Nombre -->
+    <EditText
+        android:id="@+id/inputNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre"
+        android:inputType="text"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Campo Primer Apellido -->
+    <EditText
+        android:id="@+id/inputApellidoP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Primer Apellido"
+        android:inputType="text"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Campo Segundo Apellido -->
+    <EditText
+        android:id="@+id/inputApellidoM"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Segundo Apellido"
+        android:inputType="text"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Campo Fecha de Nacimiento -->
+    <EditText
+        android:id="@+id/inputFechaNacimiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fecha de Nacimiento"
+        android:inputType="text"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Campo Teléfono -->
+    <EditText
+        android:id="@+id/inputTelefono"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Teléfono"
+        android:inputType="phone"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Campo Email -->
+    <EditText
+        android:id="@+id/inputEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Correo Electrónico"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Spinner para seleccionar la carrera -->
+    <Spinner
+        android:id="@+id/input_carrera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Alerta de éxito -->
+    <TextView
+        android:id="@+id/alerta_exito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actualización exitosa"
+        android:textColor="@android:color/holo_green_dark"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Alerta de error -->
+    <TextView
+        android:id="@+id/alerta_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Error al actualizar"
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Botón de actualización con color verde -->
+    <Button
+        android:id="@+id/btn_actualizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/holo_green_light"
+        android:onClick="actualizar"
+        android:text="Actualizar"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

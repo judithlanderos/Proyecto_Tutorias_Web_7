@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Proyecto_Tutorias_Web_7</string>
+    <string-array name="carreras_array">
+        <item>Seleccionar carrera</item>
+        <item>Administracion</item>
+        <item>Ingenieria en Industrias Alimentarias</item>
+        <item>Ingenieria en Sistemas Computacionales</item>
+        <item>Ingenieria Mecatronica</item>
+        <item>Licenciatura en Contador</item>
+    </string-array>
+</resources>

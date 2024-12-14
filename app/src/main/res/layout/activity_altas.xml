@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eafaf1"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Alertas -->
+        <TextView
+            android:id="@+id/alerta_exito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#28a745"
+            android:padding="10dp"
+            android:text="Registro agregado correctamente"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/alerta_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FF0000"
+            android:padding="10dp"
+            android:text="Error al validar los datos"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
+
+        <!-- Formulario -->
+        <EditText
+            android:id="@+id/inputNumControl"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="Número de Control (1 letra seguida de 8 números)"
+            android:inputType="text"
+            android:maxLength="9"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/inputNombre"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:hint="Nombre"
+            android:inputType="textPersonName"
+            android:maxLength="50"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/inputApellidoP"
+            android:layout_width="match_parent"
+            android:layout_height="117dp"
+            android:hint="Primer Apellido"
+            android:inputType="textPersonName"
+            android:maxLength="50"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/inputApellidoM"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:hint="Segundo Apellido"
+            android:inputType="textPersonName"
+            android:maxLength="50"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/inputFechaNacimiento"
+            android:layout_width="match_parent"
+            android:layout_height="101dp"
+            android:hint="Fecha de Nacimiento (DD-MM-YYYY)"
+            android:inputType="text"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/inputTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="99dp"
+            android:hint="Teléfono (10 dígitos)"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/inputEmail"
+            android:layout_width="match_parent"
+            android:layout_height="94dp"
+            android:hint="Correo Electrónico"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"
+            android:padding="10dp" />
+
+        <Spinner
+            android:id="@+id/input_carrera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/carreras_array"
+            android:spinnerMode="dropdown" />
+
+        <Button
+            android:id="@+id/btn_agregar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#4CAF50"
+            android:onClick="agregarAlumno"
+            android:padding="10dp"
+            android:text="AGREGAR"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Listado de Alumnos"
+            android:textColor="#333"
+            android:textSize="18sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_listado_alumnos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:background="#FFFFFF"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
+</ScrollView>

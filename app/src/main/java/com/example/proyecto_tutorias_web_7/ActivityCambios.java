@@ -1,0 +1,223 @@
+package com.example.proyecto_tutorias_web_7;
+import android.util.Log;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.content.Context;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.OutputStream;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import org.json.JSONObject;
+import org.json.JSONException;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.app.Activity;
+
+public class ActivityCambios extends Activity {
+
+    private EditText inputNumControl, inputNombre, inputApellidoP, inputApellidoM, inputFechaNacimiento, inputTelefono, inputEmail;
+    private Spinner inputCarrera;
+    private TextView alertaExito, alertaError;
+    private Button btnActualizar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cambios);
+
+        inputNumControl = findViewById(R.id.inputNumControl);
+        inputNombre = findViewById(R.id.inputNombre);
+        inputApellidoP = findViewById(R.id.inputApellidoP);
+        inputApellidoM = findViewById(R.id.inputApellidoM);
+        inputFechaNacimiento = findViewById(R.id.inputFechaNacimiento);
+        inputTelefono = findViewById(R.id.inputTelefono);
+        inputEmail = findViewById(R.id.inputEmail);
+        inputCarrera = findViewById(R.id.input_carrera);
+        alertaExito = findViewById(R.id.alerta_exito);
+        alertaError = findViewById(R.id.alerta_error);
+        btnActualizar = findViewById(R.id.btn_actualizar);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.carreras_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        inputCarrera.setAdapter(adapter);
+
+        String numControlEdit = getIntent().getStringExtra("NUM_CONTROL_EDIT");
+        inputNumControl.setText(numControlEdit);
+    }
+
+    public void actualizar(View view) {
+        String numControl = inputNumControl.getText().toString().trim();
+        String nombre = inputNombre.getText().toString().trim();
+        String apellidoP = inputApellidoP.getText().toString().trim();
+        String apellidoM = inputApellidoM.getText().toString().trim();
+        String fechaNacimiento = inputFechaNacimiento.getText().toString().trim();
+        String telefono = inputTelefono.getText().toString().trim();
+        String email = inputEmail.getText().toString().trim();
+        String carrera = inputCarrera.getSelectedItem().toString();
+
+        Log.d("DatosFormulario", "NumControl: " + numControl);
+        Log.d("DatosFormulario", "Nombre: " + nombre);
+        Log.d("DatosFormulario", "Apellido P: " + apellidoP);
+        Log.d("DatosFormulario", "Apellido M: " + apellidoM);
+        Log.d("DatosFormulario", "Fecha Nacimiento: " + fechaNacimiento);
+        Log.d("DatosFormulario", "Telefono: " + telefono);
+        Log.d("DatosFormulario", "Email: " + email);
+        Log.d("DatosFormulario", "Carrera: " + carrera);
+
+        boolean datosCorrectos = true;
+        StringBuilder errores = new StringBuilder();
+
+        // Validaciones
+        if (!numControl.matches("^[a-zA-Z]\\d{8}$")) {
+            datosCorrectos = false;
+            errores.append("Número de control debe ser 1 letra seguida de 8 números.\n");
+        }
+
+        if (!nombre.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            datosCorrectos = false;
+            errores.append("El nombre solo puede contener letras.\n");
+        }
+
+        if (!apellidoP.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            datosCorrectos = false;
+            errores.append("El primer apellido solo puede contener letras.\n");
+        }
+
+        if (!TextUtils.isEmpty(apellidoM) && !apellidoM.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")) {
+            datosCorrectos = false;
+            errores.append("El segundo apellido solo puede contener letras.\n");
+        }
+
+        if (!telefono.matches("^\\d{10}$")) {
+            datosCorrectos = false;
+            errores.append("El teléfono debe contener 10 dígitos.\n");
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            datosCorrectos = false;
+            errores.append("El correo electrónico no tiene un formato válido.\n");
+        }
+
+        if ("Seleccionar carrera".equals(carrera)) {
+            datosCorrectos = false;
+            errores.append("Por favor selecciona una carrera.\n");
+        }
+
+        if (datosCorrectos) {
+            alertaExito.setVisibility(View.VISIBLE);
+            alertaExito.setText("Registro actualizado correctamente");
+            alertaError.setVisibility(View.GONE);
+
+            actualizarDatosAPI(numControl, nombre, apellidoP, apellidoM, fechaNacimiento, telefono, email, carrera);
+        } else {
+            alertaError.setVisibility(View.VISIBLE);
+            alertaError.setText(errores.toString());
+            alertaExito.setVisibility(View.GONE);
+        }
+    }
+
+    private void actualizarDatosAPI(String numControl, String nombre, String apellidoP, String apellidoM, String fechaNacimiento, String telefono, String email, String carrera) {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network network = cm.getActiveNetwork();
+
+        if (network != null && cm.getNetworkCapabilities(cm.getActiveNetwork()) != null) {
+            Log.d("Datos Enviados", "Nombre: " + nombre + ", Apellido P: " + apellidoP + ", Apellido M: " + apellidoM);
+
+            String URL = "http://192.168.0.17:8081/Semestre_Ago_Dic_2024/Proyecto_ProgramacionWeb/api_rest_android_escuela/api_mysql_cambios.php";
+            String metodo = "POST";
+
+            JSONObject datos = new JSONObject();
+            try {
+                datos.put("nc", numControl);
+                datos.put("nombre", nombre);
+                datos.put("apellidoP", apellidoP);
+                datos.put("apellidoM", apellidoM);
+                datos.put("fecha_nacimiento", fechaNacimiento);
+                datos.put("telefono", telefono);
+                datos.put("email", email);
+                datos.put("carrera_id", carrera);
+
+                // Enviar la solicitud HTTP en un hilo separado
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL(URL);
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setRequestMethod(metodo);
+                            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                            connection.setDoOutput(true);
+
+                            // Escribir el objeto JSON en el cuerpo de la solicitud
+                            OutputStream os = connection.getOutputStream();
+                            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                            writer.write(datos.toString());
+                            writer.flush();
+                            writer.close();
+                            os.close();
+
+                            // Leer la respuesta
+                            int responseCode = connection.getResponseCode();
+                            if (responseCode == HttpURLConnection.HTTP_OK) {
+                                // La respuesta fue exitosa
+                                InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+                                BufferedReader reader = new BufferedReader(inputStreamReader);
+                                StringBuilder response = new StringBuilder();
+                                String line;
+                                while ((line = reader.readLine()) != null) {
+                                    response.append(line);
+                                }
+                                reader.close();
+
+                                // Procesar la respuesta JSON
+                                JSONObject responseJSON = new JSONObject(response.toString());
+                                String resultado = responseJSON.getString("cambio");
+                                if (resultado.equals("exito")) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getBaseContext(), "Actualización correcta", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                } else {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getBaseContext(), "Error al actualizar", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getBaseContext(), "Error en la conexión", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getBaseContext(), "Error en la conexión de red", Toast.LENGTH_LONG).show();
+        }
+    }
+}

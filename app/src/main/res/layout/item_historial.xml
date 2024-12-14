@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <!-- ID Registro -->
+    <TextView
+        android:id="@+id/idRegistro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID Registro"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Número de Control -->
+    <TextView
+        android:id="@+id/numControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Número de Control"
+        android:textSize="14sp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Columna Modificada -->
+    <TextView
+        android:id="@+id/columnaModificada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Columna Modificada"
+        android:textSize="14sp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Valor Anterior -->
+    <TextView
+        android:id="@+id/valorAnterior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Valor Anterior"
+        android:textSize="14sp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Valor Nuevo -->
+    <TextView
+        android:id="@+id/valorNuevo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Valor Nuevo"
+        android:textSize="14sp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Fecha -->
+    <TextView
+        android:id="@+id/fecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha"
+        android:textSize="14sp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Usuario -->
+    <TextView
+        android:id="@+id/usuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Usuario"
+        android:textSize="14sp"
+        android:paddingBottom="8dp"/>
+</LinearLayout>
