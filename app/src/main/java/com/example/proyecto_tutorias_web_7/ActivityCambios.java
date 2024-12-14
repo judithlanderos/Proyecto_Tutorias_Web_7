@@ -25,16 +25,17 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.app.Activity;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.proyecto_tutorias_web_7.AlumnoAdapter;
 import com.example.proyecto_tutorias_web_7.modelo.Alumno;
 
 import controlador.AnalizadorJSON;
-
 
 public class ActivityCambios extends Activity {
 
@@ -240,6 +241,7 @@ public class ActivityCambios extends Activity {
             Toast.makeText(getBaseContext(), "Error en la conexión de red", Toast.LENGTH_LONG).show();
         }
     }
+
     private void cargarListadoDeAlumnos() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         Network network = cm.getActiveNetwork();
@@ -275,7 +277,7 @@ public class ActivityCambios extends Activity {
                             ));
                         }
 
-                        runOnUiThread(() -> alumnoAdapter.updateData(alumnos)); // Actualiza los datos en el RecyclerView
+                        runOnUiThread(() -> alumnoAdapter.updateData(alumnos));
                     } else {
                         runOnUiThread(() -> {
                             Toast.makeText(this, "No se encontraron registros", Toast.LENGTH_SHORT).show();
@@ -293,5 +295,4 @@ public class ActivityCambios extends Activity {
             Toast.makeText(this, "Error en la conexión a la red", Toast.LENGTH_SHORT).show();
         }
     }
-
 }
