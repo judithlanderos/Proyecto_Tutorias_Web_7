@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 public class ActivityBajas extends Activity {
 
     private EditText inputNumControl;
-    private static ArrayList<String> registroFiltro = new ArrayList<>();
+    private String numeroControlFiltro = "";
     private AlumnoAdapter alumnoAdapter;
 
     @Override
@@ -43,9 +45,27 @@ public class ActivityBajas extends Activity {
         alumnoAdapter = new AlumnoAdapter(new ArrayList<>());
         recyclerView.setAdapter(alumnoAdapter);
 
+        inputNumControl.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onNumeroControlChanged(inputNumControl, start, before, count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         cargarListadoDeAlumnos();
     }
-
+    private void onNumeroControlChanged(EditText editText, int start, int before, int count) {
+        numeroControlFiltro = editText.getText().toString().trim();
+        cargarListadoDeAlumnos();
+    }
 
     private void cargarListadoDeAlumnos() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -55,12 +75,12 @@ public class ActivityBajas extends Activity {
             String URL = "http://192.168.0.17:8081/Semestre_Ago_Dic_2024/Proyecto_ProgramacionWeb/api_rest_android_escuela/api_mysql_consultas.php";
             String metodo = "POST";
 
-            final String numeroControl = inputNumControl.getText().toString().trim().isEmpty() ? "%" : inputNumControl.getText().toString().trim();
+           //---- final String numeroControl = inputNumControl.getText().toString().trim().isEmpty() ? "%" : inputNumControl.getText().toString().trim();
             AnalizadorJSON analizadorJSON = new AnalizadorJSON();
 
             new Thread(() -> {
                 try {
-                    JSONObject jsonObject = analizadorJSON.peticionHTTPConsultas(URL, metodo, numeroControl);
+                    JSONObject jsonObject = analizadorJSON.peticionHTTPConsultas(URL, metodo, numeroControlFiltro);
 
                     Log.d("JSON Respuesta", jsonObject.toString());
 

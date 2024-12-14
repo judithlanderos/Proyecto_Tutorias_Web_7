@@ -3,7 +3,8 @@ package com.example.proyecto_tutorias_web_7;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import controlador.AnalizadorJSON;
+import android.widget.EditText;
+import android.widget.Button;
 import android.widget.Toast;
 import android.view.View;
 import android.view.LayoutInflater;
@@ -11,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
+import controlador.AnalizadorJSON;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +31,8 @@ public class ActivityConsultas extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private static ArrayList<String> registros = new ArrayList<>();
     private LinearLayout datosAlumnoContainer;
+    private EditText editTextBuscar;
+    private ArrayList<String> registrosFiltrados = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +41,10 @@ public class ActivityConsultas extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview_alumnos);
         recyclerView.setHasFixedSize(true);
-
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        editTextBuscar = findViewById(R.id.editTextBuscar);  // Referencia al EditText de búsqueda
 
         registros.clear();
 
@@ -74,7 +81,8 @@ public class ActivityConsultas extends AppCompatActivity {
                     }
 
                     runOnUiThread(() -> {
-                        adapter1 = new AdaptadorRegistros(registros);
+                        registrosFiltrados.addAll(registros);
+                        adapter1 = new AdaptadorRegistros(registrosFiltrados);
                         recyclerView.setAdapter(adapter1);
                     });
 
@@ -86,6 +94,42 @@ public class ActivityConsultas extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(ActivityConsultas.this, "Error al procesar JSON", Toast.LENGTH_LONG).show());
             }
         }).start();
+
+        // Implementar un TextWatcher en el EditText para filtrar los resultados en tiempo real
+        editTextBuscar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+                // No se necesita implementación aquí
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                String textoBusqueda = charSequence.toString().toLowerCase();
+                if (!textoBusqueda.isEmpty()) {
+                    ArrayList<String> registrosFiltrados = new ArrayList<>();
+                    for (String registro : registros) {
+                        if (registro.toLowerCase().contains(textoBusqueda)) {
+                            registrosFiltrados.add(registro);
+                        }
+                    }
+                    actualizarRecyclerView(registrosFiltrados);
+                } else {
+                    actualizarRecyclerView(registros);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // No se necesita implementación aquí
+            }
+        });
+    }
+
+    private void actualizarRecyclerView(ArrayList<String> datosFiltrados) {
+        runOnUiThread(() -> {
+            adapter1 = new AdaptadorRegistros(datosFiltrados);
+            recyclerView.setAdapter(adapter1);
+        });
     }
 
     class AdaptadorRegistros extends RecyclerView.Adapter<AdaptadorRegistros.MyViewHolder> {
