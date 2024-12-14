@@ -4,7 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +40,19 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         holder.tvTelefono.setText("Teléfono: " + alumno.getTelefono());
         holder.tvEmail.setText("Email: " + alumno.getEmail());
         holder.tvCarrera.setText("Carrera: " + alumno.getCarreraId());
+
+        holder.itemView.setOnLongClickListener(v -> {
+            new AlertDialog.Builder(v.getContext())
+                    .setMessage("¿Estás seguro de que deseas eliminar este alumno?")
+                    .setCancelable(false)
+                    .setPositiveButton("Sí", (dialog, id) -> {
+                        eliminarAlumno(position);
+                        Toast.makeText(v.getContext(), "Alumno eliminado", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            return true;
+        });
     }
 
     @Override
@@ -48,6 +63,11 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
     public void updateData(List<Alumno> nuevosAlumnos) {
         this.listaAlumnos = nuevosAlumnos;
         notifyDataSetChanged();
+    }
+
+    private void eliminarAlumno(int position) {
+        listaAlumnos.remove(position);
+        notifyItemRemoved(position);
     }
 
     public static class AlumnoViewHolder extends RecyclerView.ViewHolder {

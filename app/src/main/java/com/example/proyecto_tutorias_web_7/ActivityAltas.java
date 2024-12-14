@@ -202,12 +202,12 @@ public class ActivityAltas extends Activity {
                                 JSONObject responseJSON = new JSONObject(response.toString());
                                 String resultado = responseJSON.getString("alta");
                                 if (resultado.equals("exito")) {
-                                    cargarListadoDeAlumnos();
-
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Toast.makeText(getBaseContext(), "Inserción correcta", Toast.LENGTH_LONG).show();
+                                            cargarListadoDeAlumnos();
+
                                         }
                                     });
                                 } else {

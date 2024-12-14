@@ -19,11 +19,18 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 import org.json.JSONException;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.app.Activity;
+import com.example.proyecto_tutorias_web_7.AlumnoAdapter;
+import com.example.proyecto_tutorias_web_7.modelo.Alumno;
+
 
 public class ActivityCambios extends Activity {
 
@@ -31,6 +38,8 @@ public class ActivityCambios extends Activity {
     private Spinner inputCarrera;
     private TextView alertaExito, alertaError;
     private Button btnActualizar;
+    private AlumnoAdapter alumnoAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,13 @@ public class ActivityCambios extends Activity {
 
         String numControlEdit = getIntent().getStringExtra("NUM_CONTROL_EDIT");
         inputNumControl.setText(numControlEdit);
+
+        RecyclerView recyclerView = findViewById(R.id.rv_listado_alumnos);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        alumnoAdapter = new AlumnoAdapter(new ArrayList<>());
+        recyclerView.setAdapter(alumnoAdapter);
+
+        cargarListadoDeAlumnos();
     }
 
     public void actualizar(View view) {
