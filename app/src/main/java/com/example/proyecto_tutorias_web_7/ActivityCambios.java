@@ -20,7 +20,9 @@ import java.io.OutputStreamWriter;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +32,8 @@ import android.net.Network;
 import android.app.Activity;
 import com.example.proyecto_tutorias_web_7.AlumnoAdapter;
 import com.example.proyecto_tutorias_web_7.modelo.Alumno;
+
+import controlador.AnalizadorJSON;
 
 
 public class ActivityCambios extends Activity {
@@ -236,4 +240,58 @@ public class ActivityCambios extends Activity {
             Toast.makeText(getBaseContext(), "Error en la conexión de red", Toast.LENGTH_LONG).show();
         }
     }
+    private void cargarListadoDeAlumnos() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network network = cm.getActiveNetwork();
+
+        if (network != null && cm.getNetworkCapabilities(cm.getActiveNetwork()) != null) {
+            String URL = "http://192.168.0.17:8081/Semestre_Ago_Dic_2024/Proyecto_ProgramacionWeb/api_rest_android_escuela/api_mysql_consultas.php";
+            String metodo = "POST";
+
+            final String numeroControl = inputNumControl.getText().toString().trim().isEmpty() ? "%" : inputNumControl.getText().toString().trim();
+            AnalizadorJSON analizadorJSON = new AnalizadorJSON();
+
+            new Thread(() -> {
+                try {
+                    JSONObject jsonObject = analizadorJSON.peticionHTTPConsultas(URL, metodo, numeroControl);
+
+                    Log.d("JSON Respuesta", jsonObject.toString());
+
+                    if (jsonObject != null && jsonObject.getString("consulta").equals("exito")) {
+                        JSONArray datos = jsonObject.getJSONArray("alumnos");
+
+                        List<Alumno> alumnos = new ArrayList<>();
+                        for (int i = 0; i < datos.length(); i++) {
+                            JSONObject alumno = datos.getJSONObject(i);
+                            alumnos.add(new Alumno(
+                                    alumno.getString("nc"),
+                                    alumno.getString("n"),
+                                    alumno.getString("primer_ap"),
+                                    alumno.getString("segundo_ap"),
+                                    alumno.getString("fecha_nacimiento"),
+                                    alumno.getString("telefono"),
+                                    alumno.getString("email"),
+                                    alumno.getString("carrera_id")
+                            ));
+                        }
+
+                        runOnUiThread(() -> alumnoAdapter.updateData(alumnos)); // Actualiza los datos en el RecyclerView
+                    } else {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "No se encontraron registros", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Error al procesar los datos", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }).start();
+        } else {
+            Log.e("MSJ ->", "Error en la red (wifi)");
+            Toast.makeText(this, "Error en la conexión a la red", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
