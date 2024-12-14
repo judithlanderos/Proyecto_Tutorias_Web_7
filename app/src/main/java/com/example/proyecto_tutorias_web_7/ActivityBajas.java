@@ -32,7 +32,8 @@ public class ActivityBajas extends Activity {
     private EditText inputNumControl;
     private String numeroControlFiltro = "";
     private AlumnoAdapter alumnoAdapter;
-
+    private List<Alumno> listaAlumnosOriginal = new ArrayList<>();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
