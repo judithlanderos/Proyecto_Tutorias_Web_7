@@ -40,6 +40,10 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
     }
     private OnAlumnoClickListener listener;
 
+    public void setOnAlumnoClickListener(OnAlumnoClickListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull AlumnoViewHolder holder, int position) {
         Alumno alumno = listaAlumnos.get(position);
