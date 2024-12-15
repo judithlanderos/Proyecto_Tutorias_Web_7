@@ -9,4 +9,14 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bienvenido a Nuestro Sitio"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
