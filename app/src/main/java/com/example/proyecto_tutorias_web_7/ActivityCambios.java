@@ -158,6 +158,15 @@ public class ActivityCambios extends Activity implements AlumnoAdapter.OnAlumnoC
             alertaExito.setText("Registro actualizado correctamente");
             alertaError.setVisibility(View.GONE);
 
+            inputNumControl.setText("");
+            inputNombre.setText("");
+            inputApellidoP.setText("");
+            inputApellidoM.setText("");
+            inputFechaNacimiento.setText("");
+            inputTelefono.setText("");
+            inputEmail.setText("");
+            inputCarrera.setSelection(0);
+
             actualizarDatosAPI(numControl, nombre, apellidoP, apellidoM, fechaNacimiento, telefono, email, carrera);
         } else {
             alertaError.setVisibility(View.VISIBLE);
