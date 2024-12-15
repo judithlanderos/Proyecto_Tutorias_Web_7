@@ -57,6 +57,12 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         holder.tvEmail.setText("Email: " + alumno.getEmail());
         holder.tvCarrera.setText("Carrera: " + alumno.getCarreraId());
 
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onAlumnoClick(alumno);
+            }
+        });
+
         holder.itemView.setOnLongClickListener(v -> {
             new AlertDialog.Builder(v.getContext())
                     .setMessage("¿Estás seguro de que deseas eliminar este alumno?")
