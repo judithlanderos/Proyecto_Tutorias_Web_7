@@ -162,7 +162,6 @@ public class ActivityConsultas extends AppCompatActivity {
                         .setTitle("Eliminar Registro")
                         .setMessage("¿Estás seguro de que deseas eliminar este registro?")
                         .setPositiveButton("Sí", (dialog, which) -> {
-                            // Eliminar el registro de la lista
                             datos.remove(position);
                             registros.remove(position);
                             notifyItemRemoved(position);
