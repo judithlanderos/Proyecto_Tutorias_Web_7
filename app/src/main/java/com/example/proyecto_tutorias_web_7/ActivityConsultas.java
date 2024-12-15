@@ -26,6 +26,11 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class ActivityConsultas extends AppCompatActivity {
 
@@ -158,21 +163,77 @@ public class ActivityConsultas extends AppCompatActivity {
 
 
             holder.itemView.setOnLongClickListener(v -> {
+                String numControl = datosAlumno[0];
+
                 new AlertDialog.Builder(v.getContext())
                         .setTitle("Eliminar Registro")
                         .setMessage("¿Estás seguro de que deseas eliminar este registro?")
                         .setPositiveButton("Sí", (dialog, which) -> {
-                            datos.remove(position);
-                            registros.remove(position);
-                            notifyItemRemoved(position);
-                            notifyItemRangeChanged(position, datos.size());
-                            Toast.makeText(v.getContext(), "Registro eliminado", Toast.LENGTH_SHORT).show();
+                            new Thread(() -> {
+                                try {
+                                    String url = "http://192.168.0.17:8081/Semestre_Ago_Dic_2024/Proyecto_ProgramacionWeb/api_rest_android_escuela/api_mysql_bajas.php";
+                                    JSONObject jsonBaja = new JSONObject();
+                                    jsonBaja.put("nc", numControl);
+
+                                    HttpURLConnection conexion = (HttpURLConnection) new URL(url).openConnection();
+                                    conexion.setRequestMethod("POST");
+                                    conexion.setRequestProperty("Content-Type", "application/json");
+                                    conexion.setDoOutput(true);
+
+                                    try (OutputStreamWriter out = new OutputStreamWriter(conexion.getOutputStream())) {
+                                        out.write(jsonBaja.toString());
+                                    }
+
+                                    int codigoRespuesta = conexion.getResponseCode();
+                                    StringBuilder respuesta = new StringBuilder();
+
+                                    try (BufferedReader in = new BufferedReader(new InputStreamReader(conexion.getInputStream()))) {
+                                        String linea;
+                                        while ((linea = in.readLine()) != null) {
+                                            respuesta.append(linea);
+                                        }
+                                    }
+
+                                    runOnUiThread(() -> {
+                                        try {
+                                            JSONObject jsonRespuesta = new JSONObject(respuesta.toString());
+                                            if ("exito".equals(jsonRespuesta.getString("baja"))) {
+                                                datos.remove(position);
+                                                registros.remove(position);
+
+                                                notifyItemRemoved(position);
+                                                notifyItemRangeChanged(position, datos.size());
+
+                                                Toast.makeText(ActivityConsultas.this,
+                                                        jsonRespuesta.getString("mensaje"),
+                                                        Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(ActivityConsultas.this,
+                                                        jsonRespuesta.getString("mensaje"),
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Toast.makeText(ActivityConsultas.this,
+                                                    "Error al procesar la respuesta",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    runOnUiThread(() ->
+                                            Toast.makeText(ActivityConsultas.this,
+                                                    "Error al eliminar: " + e.getMessage(),
+                                                    Toast.LENGTH_SHORT).show()
+                                    );
+                                }
+                            }).start();
                         })
                         .setNegativeButton("No", null)
                         .show();
                 return true;
             });
-
         }
 
         @Override
