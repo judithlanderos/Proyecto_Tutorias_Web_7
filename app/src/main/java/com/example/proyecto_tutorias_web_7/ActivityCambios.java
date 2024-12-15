@@ -35,7 +35,7 @@ import com.example.proyecto_tutorias_web_7.AlumnoAdapter;
 import com.example.proyecto_tutorias_web_7.modelo.Alumno;
 import controlador.AnalizadorJSON;
 
-public class ActivityCambios extends Activity {
+public class ActivityCambios extends Activity implements AlumnoAdapter.OnAlumnoClickListener {
 
     private EditText inputNumControl, inputNombre, inputApellidoP, inputApellidoM, inputFechaNacimiento, inputTelefono, inputEmail;
     private Spinner inputCarrera;
