@@ -35,6 +35,10 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alumno, parent, false);
         return new AlumnoViewHolder(view);
     }
+    public interface OnAlumnoClickListener {
+        void onAlumnoClick(Alumno alumno);
+    }
+    
 
     @Override
     public void onBindViewHolder(@NonNull AlumnoViewHolder holder, int position) {
