@@ -71,6 +71,7 @@ public class ActivityCambios extends Activity {
         RecyclerView recyclerView = findViewById(R.id.rv_listado_alumnos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         alumnoAdapter = new AlumnoAdapter(new ArrayList<>());
+        alumnoAdapter.setOnAlumnoClickListener(this);
         recyclerView.setAdapter(alumnoAdapter);
 
         EditText etBuscar = findViewById(R.id.inputNumControl);
@@ -89,6 +90,10 @@ public class ActivityCambios extends Activity {
         });
 
         cargarListadoDeAlumnos();
+    }
+    @Override
+    public void onAlumnoClick(Alumno alumno) {
+        cargarDatosEnFormulario(alumno);
     }
 
     public void actualizar(View view) {
