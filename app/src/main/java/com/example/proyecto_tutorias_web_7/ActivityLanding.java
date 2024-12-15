@@ -16,30 +16,28 @@ public class ActivityLanding extends AppCompatActivity {
         Button btnRegistro = findViewById(R.id.btn_registro);
         Button btnLogin = findViewById(R.id.btn_login);
 
-        public void irAlRegistro(View view) {
-            Intent intentRegistro = new Intent(ActivityLanding.this, ActivityRegistro.class);
-            startActivity(intentRegistro);
-        }
-
-        public void irAlLogin(View view) {
-            Intent intentLogin = new Intent(ActivityLanding.this, ActivityLogin.class);
-            startActivity(intentLogin);
-        }
-
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentRegistro = new Intent(ActivityLanding.this, ActivityRegistro.class);
-                startActivity(intentRegistro);
+                irAlRegistro(v);
             }
         });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentLogin = new Intent(ActivityLanding.this, ActivityLogin.class);
-                startActivity(intentLogin);
+                irAlLogin(v);
             }
         });
+    }
+
+    public void irAlRegistro(View view) {
+        Intent intentRegistro = new Intent(ActivityLanding.this, ActivityRegistro.class);
+        startActivity(intentRegistro);
+    }
+
+    public void irAlLogin(View view) {
+        Intent intentLogin = new Intent(ActivityLanding.this, ActivityLogin.class);
+        startActivity(intentLogin);
     }
 }

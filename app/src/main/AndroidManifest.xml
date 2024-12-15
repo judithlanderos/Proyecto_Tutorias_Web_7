@@ -16,7 +16,6 @@
         android:theme="@style/Theme.Proyecto_Tutorias_Web_7"
         tools:targetApi="23">
 
-        <!-- Establecer ActivityLogin como la actividad principal -->
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityLanding"
             android:exported="true">
             <intent-filter>
@@ -25,7 +24,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Otras actividades -->
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityAltas" android:exported="true" />
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityBajas" android:exported="true" />
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityCambios" android:exported="true"/>
@@ -33,9 +31,9 @@
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityTrigger" android:exported="true" />
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityVista" android:exported="true" />
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityProcedimientoFuncion" android:exported="true" />
+        <activity android:name="com.example.proyecto_tutorias_web_7.ActivityLogin" android:exported="true" />
         <activity android:name="com.example.proyecto_tutorias_web_7.ActivityRegistro" android:exported="true" />
 
-        <!-- MainActivity sin el intent-filter MAIN -->
         <activity android:name=".MainActivity"
             android:exported="true" />
     </application>
