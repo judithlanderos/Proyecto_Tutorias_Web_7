@@ -38,7 +38,7 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
     public interface OnAlumnoClickListener {
         void onAlumnoClick(Alumno alumno);
     }
-    
+    private OnAlumnoClickListener listener;
 
     @Override
     public void onBindViewHolder(@NonNull AlumnoViewHolder holder, int position) {
