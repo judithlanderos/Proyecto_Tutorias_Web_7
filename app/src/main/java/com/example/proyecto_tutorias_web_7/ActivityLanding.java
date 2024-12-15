@@ -12,9 +12,14 @@ public class ActivityLanding extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
-        
+
         Button btnRegistro = findViewById(R.id.btn_registro);
         Button btnLogin = findViewById(R.id.btn_login);
+
+        public void irAlRegistro(View view) {
+            Intent intentRegistro = new Intent(ActivityLanding.this, ActivityRegistro.class);
+            startActivity(intentRegistro);
+        }
 
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
