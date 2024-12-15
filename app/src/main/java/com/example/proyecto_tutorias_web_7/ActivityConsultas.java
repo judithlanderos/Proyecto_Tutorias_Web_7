@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.ArrayList;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AlertDialog;
+import android.content.DialogInterface;
+
 public class ActivityConsultas extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -95,11 +98,9 @@ public class ActivityConsultas extends AppCompatActivity {
             }
         }).start();
 
-        // Implementar un TextWatcher en el EditText para filtrar los resultados en tiempo real
         editTextBuscar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-                // No se necesita implementación aquí
             }
 
             @Override
@@ -120,7 +121,6 @@ public class ActivityConsultas extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // No se necesita implementación aquí
             }
         });
     }
@@ -155,6 +155,25 @@ public class ActivityConsultas extends AppCompatActivity {
             holder.tvTelefono.setText("Teléfono: " + datosAlumno[5]);
             holder.tvEmail.setText("Email: " + datosAlumno[6]);
             holder.tvCarrera.setText("Carrera: " + datosAlumno[7]);
+
+
+            holder.itemView.setOnLongClickListener(v -> {
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("Eliminar Registro")
+                        .setMessage("¿Estás seguro de que deseas eliminar este registro?")
+                        .setPositiveButton("Sí", (dialog, which) -> {
+                            // Eliminar el registro de la lista
+                            datos.remove(position);
+                            registros.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, datos.size());
+                            Toast.makeText(v.getContext(), "Registro eliminado", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                return true;
+            });
+
         }
 
         @Override
