@@ -21,6 +21,11 @@ public class ActivityLanding extends AppCompatActivity {
             startActivity(intentRegistro);
         }
 
+        public void irAlLogin(View view) {
+            Intent intentLogin = new Intent(ActivityLanding.this, ActivityLogin.class);
+            startActivity(intentLogin);
+        }
+
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
