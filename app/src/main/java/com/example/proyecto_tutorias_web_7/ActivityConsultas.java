@@ -44,7 +44,7 @@ public class ActivityConsultas extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        editTextBuscar = findViewById(R.id.editTextBuscar);  // Referencia al EditText de búsqueda
+        editTextBuscar = findViewById(R.id.editTextBuscar);
 
         registros.clear();
 

@@ -9,6 +9,10 @@ import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 import java.util.List;
 import com.example.proyecto_tutorias_web_7.modelo.Alumno;
@@ -16,9 +20,13 @@ import com.example.proyecto_tutorias_web_7.modelo.Alumno;
 public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoViewHolder> {
 
     private List<Alumno> listaAlumnos;
+    private List<Alumno> listaAlumnosCompleta;
 
     public AlumnoAdapter(List<Alumno> listaAlumnos) {
+
         this.listaAlumnos = listaAlumnos;
+        this.listaAlumnosCompleta = new ArrayList<>(listaAlumnos);
+
     }
 
     @NonNull
@@ -62,6 +70,22 @@ public class AlumnoAdapter extends RecyclerView.Adapter<AlumnoAdapter.AlumnoView
 
     public void updateData(List<Alumno> nuevosAlumnos) {
         this.listaAlumnos = nuevosAlumnos;
+        this.listaAlumnosCompleta = new ArrayList<>(nuevosAlumnos);
+        notifyDataSetChanged();
+    }
+
+    public void filtrar(String texto) {
+        listaAlumnos.clear();
+        if (TextUtils.isEmpty(texto)) {
+            listaAlumnos.addAll(listaAlumnosCompleta);
+        } else {
+            for (Alumno alumno : listaAlumnosCompleta) {
+                if (alumno.getNombre().toLowerCase(Locale.getDefault()).contains(texto.toLowerCase(Locale.getDefault())) ||
+                        alumno.getNumControl().toLowerCase(Locale.getDefault()).contains(texto.toLowerCase(Locale.getDefault()))) {
+                    listaAlumnos.add(alumno);
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 

@@ -1,6 +1,8 @@
 package com.example.proyecto_tutorias_web_7;
-import android.util.Log;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -21,20 +23,16 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.app.Activity;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.proyecto_tutorias_web_7.AlumnoAdapter;
 import com.example.proyecto_tutorias_web_7.modelo.Alumno;
-
 import controlador.AnalizadorJSON;
 
 public class ActivityCambios extends Activity {
@@ -44,7 +42,6 @@ public class ActivityCambios extends Activity {
     private TextView alertaExito, alertaError;
     private Button btnActualizar;
     private AlumnoAdapter alumnoAdapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +73,21 @@ public class ActivityCambios extends Activity {
         alumnoAdapter = new AlumnoAdapter(new ArrayList<>());
         recyclerView.setAdapter(alumnoAdapter);
 
+        EditText etBuscar = findViewById(R.id.inputNumControl);
+        etBuscar.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                alumnoAdapter.filtrar(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         cargarListadoDeAlumnos();
     }
 
@@ -101,7 +113,6 @@ public class ActivityCambios extends Activity {
         boolean datosCorrectos = true;
         StringBuilder errores = new StringBuilder();
 
-        // Validaciones
         if (!numControl.matches("^[a-zA-Z]\\d{8}$")) {
             datosCorrectos = false;
             errores.append("Número de control debe ser 1 letra seguida de 8 números.\n");
@@ -171,7 +182,6 @@ public class ActivityCambios extends Activity {
                 datos.put("email", email);
                 datos.put("carrera_id", carrera);
 
-                // Enviar la solicitud HTTP en un hilo separado
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -182,7 +192,6 @@ public class ActivityCambios extends Activity {
                             connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                             connection.setDoOutput(true);
 
-                            // Escribir el objeto JSON en el cuerpo de la solicitud
                             OutputStream os = connection.getOutputStream();
                             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
                             writer.write(datos.toString());
@@ -190,10 +199,8 @@ public class ActivityCambios extends Activity {
                             writer.close();
                             os.close();
 
-                            // Leer la respuesta
                             int responseCode = connection.getResponseCode();
                             if (responseCode == HttpURLConnection.HTTP_OK) {
-                                // La respuesta fue exitosa
                                 InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
                                 BufferedReader reader = new BufferedReader(inputStreamReader);
                                 StringBuilder response = new StringBuilder();
@@ -203,7 +210,6 @@ public class ActivityCambios extends Activity {
                                 }
                                 reader.close();
 
-                                // Procesar la respuesta JSON
                                 JSONObject responseJSON = new JSONObject(response.toString());
                                 String resultado = responseJSON.getString("cambio");
                                 if (resultado.equals("exito")) {
@@ -278,21 +284,17 @@ public class ActivityCambios extends Activity {
                         }
 
                         runOnUiThread(() -> alumnoAdapter.updateData(alumnos));
+
                     } else {
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "No se encontraron registros", Toast.LENGTH_SHORT).show();
-                        });
+                        runOnUiThread(() -> Toast.makeText(getBaseContext(), "No se encontraron datos", Toast.LENGTH_LONG).show());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Error al procesar los datos", Toast.LENGTH_SHORT).show();
-                    });
+                    runOnUiThread(() -> Toast.makeText(getBaseContext(), "Error al consultar los datos", Toast.LENGTH_LONG).show());
                 }
             }).start();
         } else {
-            Log.e("MSJ ->", "Error en la red (wifi)");
-            Toast.makeText(this, "Error en la conexión a la red", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "Error en la conexión de red", Toast.LENGTH_LONG).show();
         }
     }
 }
