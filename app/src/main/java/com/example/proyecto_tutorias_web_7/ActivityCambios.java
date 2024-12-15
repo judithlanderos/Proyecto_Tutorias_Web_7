@@ -302,4 +302,30 @@ public class ActivityCambios extends Activity implements AlumnoAdapter.OnAlumnoC
             Toast.makeText(getBaseContext(), "Error en la conexión de red", Toast.LENGTH_LONG).show();
         }
     }
+    private void cargarDatosEnFormulario(Alumno alumno) {
+
+        EditText inputNumControl = findViewById(R.id.inputNumControl);
+        EditText inputNombre = findViewById(R.id.inputNombre);
+        EditText inputApellidoP = findViewById(R.id.inputApellidoP);
+        EditText inputApellidoM = findViewById(R.id.inputApellidoM);
+        EditText inputFechaNacimiento = findViewById(R.id.inputFechaNacimiento);
+        EditText inputTelefono = findViewById(R.id.inputTelefono);
+        EditText inputEmail = findViewById(R.id.inputEmail);
+        Spinner inputCarrera = findViewById(R.id.input_carrera);
+
+
+        inputNumControl.setText(alumno.getNumControl());
+        inputNombre.setText(alumno.getNombre());
+        inputApellidoP.setText(alumno.getApellidoP());
+        inputApellidoM.setText(alumno.getApellidoM());
+        inputFechaNacimiento.setText(alumno.getFechaNacimiento());
+        inputTelefono.setText(alumno.getTelefono());
+        inputEmail.setText(alumno.getEmail());
+
+
+        ArrayAdapter<String> carreraAdapter = (ArrayAdapter<String>) inputCarrera.getAdapter();
+        int position = carreraAdapter.getPosition(alumno.getCarreraId());
+        inputCarrera.setSelection(position);
+    }
+
 }
